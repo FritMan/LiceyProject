@@ -102,10 +102,12 @@ class FromMemoryApp(tk.Toplevel):
     def get_username(self):
         while True:
             username = simpledialog.askstring("Имя пользователя", "Введите ваше имя:")
-            if username:
-                return username
-            else:
+            if username is None:
+                return "Неизвестный"
+            elif username.strip() == "":
                 messagebox.showwarning("Предупреждение", "Имя пользователя не может быть пустым.")
+            else:
+                return username.strip()
 
     def init_main(self):
         self.ls_word = self.tupple_lists[0]
@@ -128,7 +130,7 @@ class FromMemoryApp(tk.Toplevel):
         btn_stop = tk.Button(self, text='Стоп', command=self.stop_translate)
         btn_stop.place(x=190, y=80)
         btn_save = tk.Button(self, text='Сохранить результат', command=self.save_and_view_results)
-        btn_save.place(x=235, y=110)
+        btn_save.place(x=155, y=110)
 
         self.score_label = tk.Label(self, text=f"Счёт: {self.score}", font=('Arial', 12))
         self.score_label.place(relx=1.0, rely=0.0, x=-10, y=10, anchor='ne')
@@ -175,7 +177,6 @@ class FromMemoryApp(tk.Toplevel):
         ViewResults(self.ls_translates, self.score, self.username)
 
     def save_and_view_results(self):
-        self.save_results_to_file(self.ls_translates, self.score, self.username)
         self.view_results()
 
     def save_results_to_file(self, translates, score, username):
