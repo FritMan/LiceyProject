@@ -11,7 +11,7 @@ class DB:
             self.cur = self.conn.cursor()
             self.create_table_if_not_exists()
         except sqlite3.Error as e:
-            messagebox.showerror("Database Error", f"Error connecting to database: {e}")
+            messagebox.showerror("Ошибка БД", f"Ошибка запроса к базе данных: {e}")
             exit()
 
     def __del__(self):
@@ -35,7 +35,7 @@ class DB:
                 self.conn.commit()
                 return cursor.fetchall()
         except sqlite3.Error as e:
-            messagebox.showerror("Database Error", f"Database query error: {e}")
+            messagebox.showerror("Ошибка БД", f"Ошибка запроса к базе данных: {e}")
             return None
 
 
@@ -181,9 +181,9 @@ class FromMemoryApp(tk.Toplevel):
     def save_results_to_file(self, translates, score, username):
         try:
             with open("results.txt", "a", encoding="utf-8") as f:
-                f.write(f"Username: {username}, Score: {score}\n")
+                f.write(f"Имя пользователя: {username}, Счёт: {score}\n")
                 for i in range(0, len(translates), 3):
-                    f.write(f"Word: {translates[i]}, User Translation: {translates[i+1]}, Correct Translation: {translates[i+2]}\n")
+                    f.write(f"Слово: {translates[i]}, Перевод пользователя: {translates[i+1]}, Правильный переовод: {translates[i+2]}\n")
                 f.write("\n")
             messagebox.showinfo("Успех", "Результаты сохранены в файл results.txt")
         except Exception as e:
@@ -411,7 +411,7 @@ class EditDictionaryApp(tk.Toplevel):
         return self.db.run_query(query, parameters)
 
     def get_words(self):
-        self.tree.selection_clear() 
+        self.tree.selection_clear()
         words = self.run_query('SELECT word, meaning FROM dictionary')
         if words:
             self.tree.delete(*self.tree.get_children())
